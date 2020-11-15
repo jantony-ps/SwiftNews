@@ -17,6 +17,7 @@ class NewsDetailViewController: UIViewController, UIScrollViewDelegate {
     var index:Int = 0
     var newsFeedManager: NewsFeedManager!
     @IBOutlet weak var snapViewContianer: UIView!
+    
     override func viewDidLoad() {
         self.imageView.image = nil
         if let url = newsFeedManager.getThumbNailUrl(atIndex: index){
@@ -39,11 +40,15 @@ class NewsDetailViewController: UIViewController, UIScrollViewDelegate {
         addviewCount()
         addSelfText()
         addselfText()
-        self.scrollView.updateContentView()
+        self.updateContentView()
     }
     override func viewWillLayoutSubviews(){
         super.viewWillLayoutSubviews()
         scrollView.contentSize = CGSize(width: scrollView.contentSize.width, height:  scrollView.contentSize.height)
+        self.updateContentView()
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        updateContentView()
     }
     let comment:UILabel =  UILabel()
     func addComment(){
@@ -83,7 +88,9 @@ class NewsDetailViewController: UIViewController, UIScrollViewDelegate {
         selfText.text = text
         selfText.setConfig()
     }
- 
+    func updateContentView() {
+        self.scrollView.contentSize.height = self.scrollView.subviews.sorted(by: { $0.frame.maxY < $1.frame.maxY }).last?.frame.maxY ?? (self.selfText.frame.size.height + 100)
+    }
     
 }
 extension UIScrollView {

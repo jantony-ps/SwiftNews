@@ -107,10 +107,12 @@ class NewsFeedManager: NSObject {
     }
     func mapData(_ newsFeeds:[Children]) -> [Children]{
         var data = newsFeeds
+        DispatchQueue.main.sync{
          _ = newsFeeds.enumerated().map { (index,element) in
-            let height = Int(self.heightForView(element.data?.title ?? ""))
-            data[index].data?.titleHeight = height;
-            return
+                let height = Int(self.heightForView(element.data?.title ?? ""))
+                data[index].data?.titleHeight = height;
+                return
+            }
         }
         return data
     }
